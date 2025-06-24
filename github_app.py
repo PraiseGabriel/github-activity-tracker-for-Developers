@@ -83,7 +83,7 @@ st.markdown(
 )
 
 st.markdown("[View Praise Gabriel's LinkedIn Profile](https://www.linkedin.com/in/dataanalyst-praisegabriel)")
-st.markdown("[View Victor Zion's LinkedIn Profile](https://www.linkedin.com/in/your-second-dev-linkedin)")
+st.markdown("[View Victor Zion's LinkedIn Profile](https://www.linkedin.com/in/victor-zion)")
 
 with st.form("github_form"):
     person_name = st.text_input("What is your name?", placeholder="Enter your name")
@@ -99,15 +99,21 @@ if submitted:
 
         if events:
             dates = get_event_days(events)
-            if dates:
-                plot_event_days(dates, github_user)
-            else:
-                st.info("No recent activity found to plot.")
-
             weekday_counter = get_event_weekdays(events)
-            if weekday_counter:
-                plot_weekday_activity(weekday_counter, github_user)
-            else:
-                st.info("No weekday data to plot.")
+
+            col1, col2 = st.columns(2)
+            with col1:
+                if dates:
+                    st.subheader("Activity History")
+                    plot_event_days(dates, github_user)
+                else:
+                    st.info("No recent activity found to plot.")
+
+            with col2:
+                if weekday_counter:
+                    st.subheader("Most Active Days")
+                    plot_weekday_activity(weekday_counter, github_user)
+                else:
+                    st.info("No weekday data to plot.")
         else:
             st.error("No events found or failed to fetch data.")
