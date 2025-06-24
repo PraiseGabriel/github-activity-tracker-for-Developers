@@ -72,16 +72,17 @@ def plot_weekday_activity(weekday_counter, github_user):
 st.title("📈 Github Tracker for Recruiters")
 
 # Dev's LinkedIn profile
-st.markdown("[👉 View Dev's LinkedIn Profile](https://www.linkedin.com/in/YOUR-LINK/)")
+# Praise Oton's Profile Link update. It wasn't working well previously.
+st.markdown("[👉 View Dev's LinkedIn Profile](https://www.linkedin.com/in/dataanalyst-praisegabriel)")
 
-person_name = st.text_input("Hello,What is your name?")
-github_user = st.text_input(f" Hi {person_name} Enter GitHub username to analyze:")
+person_name = st.text_input("Hello, What is your name?")
+github_user = st.text_input(f" 👋 Hi {person_name}!\nEnter GitHub username to analyze:")
 
 if st.button("Run Analysis"):
     if not github_user:
         st.warning("⚠ Please enter a GitHub username.")
     else:
-        st.info(f"Hi {person_name}, fetching activity for **{github_user}**...")
+        st.spinner(f"🧪 Running analysis")
         events = fetch_github_events(github_user)
 
         if events:
