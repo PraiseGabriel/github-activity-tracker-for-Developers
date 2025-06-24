@@ -69,34 +69,45 @@ def plot_weekday_activity(weekday_counter, github_user):
     st.pyplot(fig)
 
 # --- STREAMLIT UI ---
-st.title("📈 Github Tracker for Recruiters")
+st.set_page_config(page_title="GitHub Activity Tracker", page_icon="📈", layout="centered")
+st.title("📈 GitHub Activity Tracker for Recruiters")
 
-# Dev's LinkedIn profile
-# Praise Oton's Profile Link update. It wasn't working well previously.
-st.markdown("[👉 View Dev's LinkedIn Profile](https://www.linkedin.com/in/dataanalyst-praisegabriel)")
+st.markdown(
+    """
+    <style>
+    .main { background-color: #f5f6fa; }
+    .stButton>button { background-color: #008CBA; color: white; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
-person_name = st.text_input("Hello, What is your name?")
-github_user = st.text_input(f" 👋 Hi {person_name}!\nEnter GitHub username to analyze:")
+st.markdown("[View Praise Gabriel's LinkedIn Profile](https://www.linkedin.com/in/dataanalyst-praisegabriel)")
+st.markdown("[View Victor Zion's LinkedIn Profile](https://www.linkedin.com/in/your-second-dev-linkedin)")
 
-if st.button("Run Analysis"):
+with st.form("github_form"):
+    person_name = st.text_input("What is your name?", placeholder="Enter your name")
+    github_user = st.text_input("GitHub username to analyze:", placeholder="e.g. octocat")
+    submitted = st.form_submit_button("Run Analysis")
+
+if submitted:
     if not github_user:
         st.warning("⚠ Please enter a GitHub username.")
     else:
-        st.spinner(f"🧪 Running analysis")
-        events = fetch_github_events(github_user)
+        with st.spinner("🧪 Running analysis..."):
+            events = fetch_github_events(github_user)
 
         if events:
             dates = get_event_days(events)
             if dates:
                 plot_event_days(dates, github_user)
             else:
-                st.warning("⚠ No recent activity found to plot.")
+                st.info("No recent activity found to plot.")
 
-            # Weekday activity
             weekday_counter = get_event_weekdays(events)
             if weekday_counter:
                 plot_weekday_activity(weekday_counter, github_user)
             else:
-                st.warning("⚠ No weekday data to plot.")
+                st.info("No weekday data to plot.")
         else:
-            st.warning("⚠ No events found or failed to fetch data.")
+            st.error("No events found or failed to fetch data.")
